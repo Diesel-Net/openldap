@@ -1,0 +1,100 @@
+# ansible-playbook deploy.yaml -i inventories/prod/hosts --vault-id ~/.tokens/master_id
+
+- hosts: tools
+  strategy: linear
+  roles:
+    - common
+
+  tasks:
+
+    - include_role:
+        name: docker
+        tasks_from: stack_teardown
+      when: clean_install | default(no)
+
+    - name: 'Wipe all persistent data'
+      file:
+        state: absent
+        path: '{{ app_dir }}'
+      become: yes
+      when: clean_install | default(no)
+
+    - include_role:
+        name: common
+        tasks_from: make_config_dir
+
+    - include_role:
+        name: common
+        tasks_from: make_data_dir
+
+    - name: Ensure {{ config_dir }}/certs exists
+      file:
+        state: directory
+        path: '{{ config_dir }}/certs'
+
+    - name: Ensure {{ config_dir }}/slapd exists
+      file:
+        state: directory
+        path: '{{ config_dir }}/slapd'
+
+    - name: 'Loosen config dir permissions'
+      file:
+        state: directory
+        path: '{{ config_dir }}'
+        mode: 'u=rwx,g=rwx,o=rwx'
+
+    - name: 'Loosen data dir permissions'
+      file:
+        state: directory
+        path: '{{ data_dir }}'
+        mode: 'u=rwx,g=rwx,o=rwx'
+
+    - name: 'Render dhparam.pem.j2 to {{ config_dir }}/certs/custom_dhparam.pem'
+      template:
+        src: dhparam.pem.j2
+        dest: '{{ config_dir }}/certs/custom_dhparam.pem'
+      become: yes
+
+    - name: 'Render ca.crt.j2 to {{ config_dir }}/certs/custom_ca.crt'
+      template:
+        src: ca.crt.j2
+        dest: '{{ config_dir }}/certs/custom_ca.crt'
+      become: yes
+
+    - name: 'Render ldap.crt.j2 to {{ config_dir }}/certs/custom_ldap.crt'
+      template:
+        src: ldap.crt.j2
+        dest: '{{ config_dir }}/certs/custom_ldap.crt'
+      become: yes
+
+    - name: 'Render ldap.key.j2 to {{ config_dir }}/certs/custom_ldap.key'
+      template:
+        src: ldap.key.j2
+        dest: '{{ config_dir }}/certs/custom_ldap.key'
+      become: yes
+
+    - name: Allow port 389 (LDAP)
+      ufw:
+        rule: allow
+        port: '389'
+        proto: any
+      become: yes
+
+    - name: Allow port 636 (LDAPS)
+      ufw:
+        rule: allow
+        port: '636'
+        proto: any
+      become: yes
+
+    - name: Reload Firewall and enable at boot
+      ufw:
+        state: enabled
+        policy: deny
+      become: yes
+
+    - include_role:
+        name: docker
+        tasks_from: stack_deploy
+
+
