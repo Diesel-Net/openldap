@@ -12,21 +12,25 @@ I had traefik entrypoint set to 636 (firewall port on VM open as well) and even 
 
 For what it's worth, here were the traefik labels that I came up with, along with traefik command line arguments. Maybe someone can figure it out.
 ```bash
+# Traefik configuration (cli)
+
 --entryPoints.ldap.address=:389
 --entryPoints.ldaps.address=:636
 ```
 
 
 ```bash
+# Docker container labels
+
 - traefik.enable=true
 
 # service (ldap, plaintext, port 389)
 - traefik.tcp.services.ldap.loadbalancer.server.port=389
 
 # ldap router
-- traefik.tcp.routers.ldaps.rule=HostSNI(`*`)
-- traefik.tcp.routers.ldaps.entrypoints=ldap
-- traefik.tcp.routers.ldaps.service=ldap@docker
+- traefik.tcp.routers.ldap.rule=HostSNI(`*`)
+- traefik.tcp.routers.ldap.entrypoints=ldap
+- traefik.tcp.routers.ldap.service=ldap@docker
 
 # ldaps router
 - traefik.tcp.routers.ldaps.rule=HostSNI(`{{ domain }}`)
