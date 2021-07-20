@@ -10,14 +10,14 @@
     - include_role:
         name: docker
         tasks_from: stack_teardown
-      when: clean_install | default(no)
+      when: clean_install | default(false)
 
     - name: 'Wipe all persistent data'
       file:
         state: absent
         path: '{{ app_dir }}'
       become: yes
-      when: clean_install | default(no)
+      when: clean_install | default(false)
 
     - include_role:
         name: common
