@@ -6,7 +6,7 @@
 
 
 ## TLS Terminating Proxy
-Many hours were spent trying to get Traefik to proxy plaintext ldap (port 389) traffic to the container, while terminate TLS. I simply wanted to leverage the ACME features of Traefik to automate my certificate renewals, but never quite got anything working. 
+Many hours were spent trying to get Traefik to proxy plaintext ldap (port 389) traffic to the container, whilst terminating TLS. I simply wanted to leverage the ACME features of Traefik to automate my certificate renewals, but never quite got anything working. 
 
 I had traefik entrypoint set to 636 (firewall port on VM open as well) and even `openssl s_client -showcerts ldap.dev.diesel.net:636` was showing `verification OK`. For some reason it would not play nicely with this container, and I cannot figure out quite why. Not sure if it has something to with OpenSSL vs GnuTLS as the underlying ssl ibrary for the openldap container, cipher/encryption algorithm being used, or maybe an incompatibility that Traefik still needs to workout.. Went down several rabbit holes haha.. 
 
@@ -40,7 +40,7 @@ For what it's worth, here were the traefik labels that I came up with, along wit
 ```
 
 
-All in all, I could not get Traefik v2.4.11 to play nicely with openldap. In addition, I do not believe that _starttls_ will ever be possible with a tls terminating proxy, due to the nature of it starting over a non-tls connection, then "upgrading" to a secure connection. So I would recommend to just feed the certificates to openldap and let it do the work. You can still use something like [certbot](https://certbot.eff.org/) with [cron](https://en.wikipedia.org/wiki/Cron) to fully automate certificate renewals.
+All in all, I could not get Traefik v2.4.11 to play nicely with openldap. In addition, I do not believe that _starttls_ will ever be possible while using a tls terminating proxy, due to the nature of it starting over a non-tls connection, then "upgrading" to a secure connection. So I would recommend to just feed the certificates to openldap and let it do the work. You can still use something like [certbot](https://certbot.eff.org/) with [cron](https://en.wikipedia.org/wiki/Cron) to fully automate certificate renewals.
 
 ## Debugging
 For official OpenLDAP docs on TLS configuration, visit [this link](https://www.openldap.org/doc/admin24/guide.html#Using%20TLS).
