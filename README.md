@@ -39,12 +39,7 @@ For what it's worth, here were the traefik labels that I came up with, along wit
 All in all, I could not get Traefik v2.4.11 to play nicely with openldap. In addition, I do not believe that _starttls_ will ever be possible with a tls terminating proxy, due to the nature of it starting over a non-tls connection, then "upgrading" to a secure connection. So I would recommend to just feed the certificates to openldap and let it do the work. You can still use something like [certbot](https://certbot.eff.org/) with [cron](https://en.wikipedia.org/wiki/Cron) to fully automate certificate renewals.
 
 ## Debugging
-These command are very useful, for ensuring both the clients and server are set up correctly. 
-
-I spent a long time trying to get Traefik to terminate TLS using a TCP router, but for some reason it would not play nicely with this container. All I wanted was to have automatic certificate renewals, lol. Not sure if it has something to with OpenSSL vs GnuTLS as the underlying ssl ibrary for this container, or maybe an incompatibility that Traefik still needs to workout.. Went down several rabbit holes. What's weird is that the `openssl -showcerts` command does not report any errors regarding the TLS handshake and verification when TLS termination is set up with Traefik, but could not get it to talk to the backend container for some reason. The TCP router (in traefik) talks to the container just fine once TLS termination is disabled, so again seems like the issue is out of my control.
-
 For official OpenLDAP docs on TLS configuration, visit [this link](https://www.openldap.org/doc/admin24/guide.html#Using%20TLS).
-
 
 ldapsearch against the running ldap container.
 ```bash
@@ -82,7 +77,7 @@ openssl s_client -showcerts ldap.dev.diesel.net:636
 ```
 
 ## Dependencies
-- ansible-core 2.11+
+- ansible-core 2.10+
 
 
 ## Installing Dependencies

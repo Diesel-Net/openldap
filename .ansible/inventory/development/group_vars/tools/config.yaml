@@ -1,0 +1,4 @@
+domain: ldap.dev.diesel.net
+admin_password: ldap
+
+clean_install: yes
