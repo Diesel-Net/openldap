@@ -12,6 +12,8 @@ services:
       - {{ config_dir }}/certs/:/container/service/slapd/assets/certs/
       - {{ config_dir }}/slapd:/etc/ldap/slapd.d
       - {{ data_dir }}:/var/lib/ldap
+      - {{ config_dir }}/hostname:/etc/hostname
+      - {{ config_dir }}/hosts:/etc/hosts
     ports:
       - 389:389
       - 636:636
@@ -30,7 +32,7 @@ services:
       - LDAP_SSL_HELPER_PREFIX=ldap
       - LDAP_OPENLDAP_UID=1001
       - LDAP_OPENLDAP_GID=1001
-    hostname: {{ domain }}
+    #hostname: {{ domain }}
     command: >
       --loglevel debug
     networks:
