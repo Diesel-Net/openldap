@@ -25,13 +25,11 @@ services:
       - LDAP_ORGANISATION=Diesel-Net
       - LDAP_DOMAIN=diesel.net
       - LDAP_ADMIN_PASSWORD={{ admin_password }}
-      #- LDAP_LOG_LEVEL=64
       - KEEP_EXISTING_CONFIG=false
       - LDAP_REMOVE_CONFIG_AFTER_SETUP=false
       - LDAP_SSL_HELPER_PREFIX=ldap
       - LDAP_OPENLDAP_UID=1001
       - LDAP_OPENLDAP_GID=1001
-      - HOSTNAME="{{ domain }}"
     hostname: {{ domain }}
     command: >
       --loglevel debug
