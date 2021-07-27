@@ -73,6 +73,18 @@
         dest: '{{ config_dir }}/certs/custom_ldap.key'
       become: yes
 
+    - name: 'Render hostname.j2 to {{ config_dir }}/hostname'
+      template:
+        src: hostname.j2
+        dest: '{{ config_dir }}/hostname'
+      become: yes
+
+    - name: 'Render hosts.j2 to {{ config_dir }}/hosts'
+      template:
+        src: hosts.j2
+        dest: '{{ config_dir }}/hosts'
+      become: yes
+
     - name: Allow port 389 (LDAP)
       ufw:
         rule: allow

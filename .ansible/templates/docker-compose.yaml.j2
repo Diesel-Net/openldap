@@ -12,6 +12,8 @@ services:
       - {{ config_dir }}/certs/:/container/service/slapd/assets/certs/
       - {{ config_dir }}/slapd:/etc/ldap/slapd.d
       - {{ data_dir }}:/var/lib/ldap
+      - {{ config_dir }}/hostname:/etc/hostname
+      - {{ config_dir }}/hosts:/etc/hosts
     ports:
       - 389:389
       - 636:636
@@ -25,14 +27,11 @@ services:
       - LDAP_ORGANISATION=Diesel-Net
       - LDAP_DOMAIN=diesel.net
       - LDAP_ADMIN_PASSWORD={{ admin_password }}
-      #- LDAP_LOG_LEVEL=64
       - KEEP_EXISTING_CONFIG=false
       - LDAP_REMOVE_CONFIG_AFTER_SETUP=false
-      - HOSTNAME={{ domain }}
       - LDAP_SSL_HELPER_PREFIX=ldap
       - LDAP_OPENLDAP_UID=1001
       - LDAP_OPENLDAP_GID=1001
-    hostname: {{ domain }}
     command: >
       --loglevel debug
     networks:

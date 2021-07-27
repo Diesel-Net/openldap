@@ -1,8 +1,7 @@
 [![Build Status](https://drone.kiwi-labs.net/api/badges/Diesel-Net/openldap/status.svg)](https://drone.kiwi-labs.net/Diesel-Net/openldap)
 
 # openldap
-- LDAP Account Manager (LAM)?
-- DisplayFusion? PHPldapAdmin?
+OpenLDAP directory service on docker swarm
 
 
 ## TLS Terminating Proxy
