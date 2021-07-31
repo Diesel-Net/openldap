@@ -1,0 +1,2 @@
+domain: ldap.diesel.net
+admin_password: "{{ lookup('env', 'LDAP_ADMIN_PASSWORD') }}"
