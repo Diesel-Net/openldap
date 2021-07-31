@@ -7,7 +7,7 @@ clone:
   depth: 1
 
 steps:
-  - name: deploy
+  - name: configure & deploy (development)
     image: plugins/ansible:3
     environment:
       ANSIBLE_CONFIG: .ansible/ansible.cfg
@@ -25,7 +25,7 @@ steps:
       event:
         - push
 
-  - name: deploy
+  - name: configure & deploy (production)
     image: plugins/ansible:3
     environment:
       ANSIBLE_CONFIG: .ansible/ansible.cfg
