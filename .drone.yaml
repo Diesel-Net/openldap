@@ -33,7 +33,7 @@ steps:
         from_secret: ldap_admin_password
     settings:
       playbook: .ansible/deploy.yaml
-      inventory: .ansible/inventory/producton/hosts
+      inventory: .ansible/inventory/production/hosts
       galaxy: .ansible/roles/requirements.yaml
       private_key:
         from_secret: automation_id_rsa
