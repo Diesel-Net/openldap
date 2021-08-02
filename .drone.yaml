@@ -7,7 +7,7 @@ clone:
   depth: 1
 
 steps:
-  - name: configure & deploy (development)
+  - name: configure & deploy (dev)
     image: plugins/ansible:3
     environment:
       ANSIBLE_CONFIG: .ansible/ansible.cfg
@@ -25,7 +25,7 @@ steps:
       event:
         - push
 
-  - name: configure & deploy (production)
+  - name: configure & deploy (prod)
     image: plugins/ansible:3
     environment:
       ANSIBLE_CONFIG: .ansible/ansible.cfg
@@ -39,6 +39,7 @@ steps:
         from_secret: automation_id_rsa
       vault_password:
         from_secret: ansible_vault_password
+      extra_vars: version=production
     when:
       branch:
         - stable
