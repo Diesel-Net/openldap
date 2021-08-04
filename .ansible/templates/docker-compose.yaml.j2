@@ -12,6 +12,13 @@ services:
       - {{ config_dir }}/certs/:/container/service/slapd/assets/certs/
       - {{ config_dir }}/slapd:/etc/ldap/slapd.d
       - {{ data_dir }}:/var/lib/ldap
+
+      # note: setting the hostname as shown in the docs causes phpLDAPadmin container
+      # (which is on the same swarm node and docker network) to resolve this
+      # container's hostname to it's internal docker ip instead of the host's. 
+     
+      # manually setting the hostname prevents docker swarm from 
+      # overriding my dns server
       - {{ config_dir }}/hostname:/etc/hostname
       - {{ config_dir }}/hosts:/etc/hosts
     ports:
