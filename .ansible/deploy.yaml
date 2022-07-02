@@ -4,6 +4,7 @@
   strategy: linear
   roles:
     - common
+    - traefik
 
   tasks:
 

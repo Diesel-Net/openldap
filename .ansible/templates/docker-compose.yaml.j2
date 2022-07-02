@@ -42,7 +42,7 @@ services:
     command: >
       --loglevel debug
     networks:
-      - {{ docker_network }}
+      - {{ traefik_network }}
 
 networks:
   {{ docker_network }}:
