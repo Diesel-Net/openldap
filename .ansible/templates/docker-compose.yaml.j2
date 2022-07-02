@@ -45,6 +45,6 @@ services:
       - {{ traefik_network }}
 
 networks:
-  {{ docker_network }}:
+  {{ traefik_network }}:
     external:
-      name: {{ docker_network }}
+      name: {{ traefik_network }}
