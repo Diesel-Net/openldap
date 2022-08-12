@@ -1,55 +1,62 @@
 ---
 kind: pipeline
 type: docker
-name: Install OpenLDAP Server
+name: Deploy OpenLDAP Server (dev)
 
 clone:
   depth: 1
 
+concurrency:
+  limit: 1
+
 steps:
-  - name: configure & deploy (dev)
-    image: plugins/ansible:3
-    environment:
-      ANSIBLE_CONFIG: .ansible/ansible.cfg
+  - name: configure & deploy
+    image: docker.nexus.diesel.net/drone-ansible:2.13
     settings:
       playbook: .ansible/deploy.yaml
-      inventory: .ansible/inventory/development/hosts
+      inventory: .ansible/inventory/dev
       galaxy: .ansible/roles/requirements.yaml
       private_key:
         from_secret: automation_id_rsa
       vault_password:
         from_secret: ansible_vault_password
-    when:
-      branch:
-        - development
-      event:
-        - push
-
-  - name: configure & deploy (prod)
-    image: plugins/ansible:3
-    environment:
-      ANSIBLE_CONFIG: .ansible/ansible.cfg
-      LDAP_ADMIN_PASSWORD:
-        from_secret: ldap_admin_password
-    settings:
-      playbook: .ansible/deploy.yaml
-      inventory: .ansible/inventory/production/hosts
-      galaxy: .ansible/roles/requirements.yaml
-      private_key:
-        from_secret: automation_id_rsa
-      vault_password:
-        from_secret: ansible_vault_password
-      extra_vars: version=production
-    when:
-      branch:
-        - stable
-      event:
-        - push
-
 
 trigger:
   branch:
     - development
+  event:
+    - push
+
+---
+kind: pipeline
+type: docker
+name: Deploy OpenLDAP Server (prod)
+
+clone:
+  depth: 1
+
+concurrency:
+  limit: 1
+
+steps:
+
+  - name: configure & deploy
+    image: docker.nexus.diesel.net/drone-ansible:2.13
+    environment:
+      LDAP_ADMIN_PASSWORD:
+        from_secret: ldap_admin_password
+    settings:
+      playbook: .ansible/deploy.yaml
+      inventory: .ansible/inventory/prod
+      galaxy: .ansible/roles/requirements.yaml
+      private_key:
+        from_secret: automation_id_rsa
+      vault_password:
+        from_secret: ansible_vault_password
+
+
+trigger:
+  branch:
     - stable
   event:
     - push

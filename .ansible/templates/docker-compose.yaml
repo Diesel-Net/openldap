@@ -8,7 +8,7 @@ services:
     image: osixia/openldap:1.5.0
     volumes:
       - /etc/localtime:/etc/localtime
-      - {{ ssl_cert_file }}:/etc/ssl/certs/ca-certificates.crt
+      - /etc/ssl/certs/ca-certificates.crt:/etc/ssl/certs/ca-certificates.crt
       - {{ config_dir }}/certs/:/container/service/slapd/assets/certs/
       - {{ config_dir }}/slapd:/etc/ldap/slapd.d
       - {{ data_dir }}:/var/lib/ldap
@@ -41,10 +41,3 @@ services:
       - LDAP_OPENLDAP_GID=1001
     command: >
       --loglevel debug
-    networks:
-      - {{ traefik_network }}
-
-networks:
-  {{ traefik_network }}:
-    external:
-      name: {{ traefik_network }}
