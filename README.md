@@ -92,6 +92,6 @@ ansible-galaxy collection install -r .ansible/roles/requirements.yaml --force
 ## Deploy
 Right now each environment is defined as an independent Virtual Machine (single-node swarm leaders)
 ```bash
-ansible-playbook .ansible/deploy.yaml -i .ansible/inventory/dev/hosts
+ansible-playbook .ansible/deploy.yaml -i .ansible/inventories/dev/hosts
 ```
 

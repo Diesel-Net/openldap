@@ -14,7 +14,7 @@ steps:
     image: docker.nexus.diesel.net/drone-ansible:2.13
     settings:
       playbook: .ansible/deploy.yaml
-      inventory: .ansible/inventory/dev
+      inventory: .ansible/inventories/dev
       galaxy: .ansible/roles/requirements.yaml
       private_key:
         from_secret: automation_id_rsa
@@ -47,7 +47,7 @@ steps:
         from_secret: ldap_admin_password
     settings:
       playbook: .ansible/deploy.yaml
-      inventory: .ansible/inventory/prod
+      inventory: .ansible/inventories/prod
       galaxy: .ansible/roles/requirements.yaml
       private_key:
         from_secret: automation_id_rsa
