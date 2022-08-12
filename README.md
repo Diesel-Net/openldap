@@ -86,6 +86,7 @@ openssl s_client -showcerts ldap.dev.diesel.net:636
 ## Installing Dependencies
 ```bash
 ansible-galaxy role install -r .ansible/roles/requirements.yaml -p .ansible/roles --force
+ansible-galaxy collection install -r .ansible/roles/requirements.yaml --force
 ```
 
 ## Deploy
