@@ -80,17 +80,18 @@ openssl s_client -showcerts ldap.dev.diesel.net:636
 ```
 
 ## Dependencies
-- ansible-core 2.10+
+- ansible-core 2.13+
 
 
 ## Installing Dependencies
 ```bash
-ansible-galaxy install -r .ansible/roles/requirements.yaml -p .ansible/roles --force
+ansible-galaxy role install -r .ansible/roles/requirements.yaml -p .ansible/roles --force
+ansible-galaxy collection install -r .ansible/roles/requirements.yaml --force
 ```
 
 ## Deploy
 Right now each environment is defined as an independent Virtual Machine (single-node swarm leaders)
 ```bash
-ansible-playbook .ansible/deploy.yaml -i .ansible/inventory/production/hosts --vault-id ~/.tokens/master_id
+ansible-playbook .ansible/deploy.yaml -i .ansible/inventories/dev/hosts
 ```
 

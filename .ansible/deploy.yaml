@@ -1,10 +1,7 @@
-# ansible-playbook deploy.yaml -i inventories/prod/hosts --vault-id ~/.tokens/master_id
-
-- hosts: tools
+- hosts: swarm_manager
   strategy: linear
   roles:
-    - common
-    - traefik
+    - application
 
   tasks:
 
@@ -21,11 +18,11 @@
       when: clean_install | default(false)
 
     - include_role:
-        name: common
+        name: application
         tasks_from: make_config_dir
 
     - include_role:
-        name: common
+        name: application
         tasks_from: make_data_dir
 
     - name: Ensure {{ config_dir }}/certs exists
@@ -50,39 +47,39 @@
         path: '{{ data_dir }}'
         mode: 'u=rwx,g=rwx,o=rwx'
 
-    - name: 'Render dhparam.pem.j2 to {{ config_dir }}/certs/custom_dhparam.pem'
-      template:
-        src: dhparam.pem.j2
+    - name: 'Copy dhparam.pem to {{ config_dir }}/certs/custom_dhparam.pem'
+      copy:
+        content: '{{ tls.dhparam }}'
         dest: '{{ config_dir }}/certs/custom_dhparam.pem'
       become: yes
 
-    - name: 'Render ca.crt.j2 to {{ config_dir }}/certs/custom_ca.crt'
-      template:
-        src: ca.crt.j2
+    - name: 'Copy ca.crt to {{ config_dir }}/certs/custom_ca.crt'
+      copy:
+        content: '{{ tls.chain }}'
         dest: '{{ config_dir }}/certs/custom_ca.crt'
       become: yes
 
-    - name: 'Render ldap.crt.j2 to {{ config_dir }}/certs/custom_ldap.crt'
-      template:
-        src: ldap.crt.j2
+    - name: 'Copy ldap.crt to {{ config_dir }}/certs/custom_ldap.crt'
+      copy:
+        content: '{{ tls.cert }}'
         dest: '{{ config_dir }}/certs/custom_ldap.crt'
       become: yes
 
-    - name: 'Render ldap.key.j2 to {{ config_dir }}/certs/custom_ldap.key'
-      template:
-        src: ldap.key.j2
+    - name: 'Copy ldap.key to {{ config_dir }}/certs/custom_ldap.key'
+      copy:
+        content: '{{ tls.key }}'
         dest: '{{ config_dir }}/certs/custom_ldap.key'
       become: yes
 
-    - name: 'Render hostname.j2 to {{ config_dir }}/hostname'
-      template:
-        src: hostname.j2
+    - name: 'Copy hostname to {{ config_dir }}/hostname'
+      copy:
+        content: '{{ domain }}'
         dest: '{{ config_dir }}/hostname'
       become: yes
 
-    - name: 'Render hosts.j2 to {{ config_dir }}/hosts'
+    - name: 'Render hosts to {{ config_dir }}/hosts'
       template:
-        src: hosts.j2
+        src: hosts
         dest: '{{ config_dir }}/hosts'
       become: yes
 
