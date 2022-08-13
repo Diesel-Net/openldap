@@ -10,7 +10,7 @@ services:
       - /etc/localtime:/etc/localtime
       - /etc/ssl/certs/ca-certificates.crt:/etc/ssl/certs/ca-certificates.crt
       - {{ config_dir }}/certs/:/container/service/slapd/assets/certs/
-      - {{ config_dir }}/slapd:/etc/ldap/slapd.d
+      - {{ config_dir }}/slapd:/etc/ldap/slapd.d # this should be treated as data !!!
       - {{ data_dir }}:/var/lib/ldap
 
       # note: setting the hostname as shown in the docs causes phpLDAPadmin container
