@@ -30,10 +30,15 @@
         state: directory
         path: '{{ config_dir }}/certs'
 
-    - name: Ensure {{ config_dir }}/slapd exists
+    - name: Ensure {{ data_dir }}/slapd exists
       file:
         state: directory
-        path: '{{ config_dir }}/slapd'
+        path: '{{ data_dir }}/slapd'
+
+    - name: Ensure {{ data_dir }}/ldap exists
+      file:
+        state: directory
+        path: '{{ data_dir }}/ldap'
 
     - name: 'Loosen config dir permissions'
       file:
