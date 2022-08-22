@@ -11,9 +11,9 @@ services:
       - /etc/ssl/certs/ca-certificates.crt:/etc/ssl/certs/ca-certificates.crt
       - {{ config_dir }}/certs/:/container/service/slapd/assets/certs/
 
-{% if nfs_hosts is defined %}
-      - ldap-database/slapd:/etc/ldap/slapd.d # this should be treated as data !!!
-      - ldap-database/ldap:/var/lib/ldap
+{% if nfs_host is defined %}
+      - slapd-config:/etc/ldap/slapd.d # this should be treated as data !!!
+      - ldap-database:/var/lib/ldap
 {% else %}
       - {{ data_dir }}/slapd:/etc/ldap/slapd.d # this should be treated as data !!!
       - {{ data_dir }}/ldap:/var/lib/ldap
@@ -50,10 +50,18 @@ services:
 
 {% if nfs_host is defined %}
 volumes:
+  
   ldap-database:
     driver: local
     driver_opts:
       type: nfs
       o: addr={{ nfs_host }},rw,nfsvers=4,async
-      device: :{{ nfs_path }}
+      device: :{{ nfs_path }}/ldap
+  
+  slapd-config:
+    driver: local
+    driver_opts:
+      type: nfs
+      o: addr={{ nfs_host }},rw,nfsvers=4,async
+      device: :{{ nfs_path }}/slapd
 {% endif %}
