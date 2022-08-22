@@ -11,7 +11,7 @@ services:
       - /etc/ssl/certs/ca-certificates.crt:/etc/ssl/certs/ca-certificates.crt
       - {{ config_dir }}/certs/:/container/service/slapd/assets/certs/
 
-{% if nfs_hosts is defined %}
+{% if nfs_host is defined %}
       - ldap-database/slapd:/etc/ldap/slapd.d # this should be treated as data !!!
       - ldap-database/ldap:/var/lib/ldap
 {% else %}
