@@ -1,2 +1,5 @@
 domain: ldap.diesel.net
 admin_password: "{{ lookup('env', 'LDAP_ADMIN_PASSWORD') }}"
+
+nfs_host: nas.diesel.net
+nsf_path: /volume1/OpenLDAP

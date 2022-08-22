@@ -10,8 +10,14 @@ services:
       - /etc/localtime:/etc/localtime
       - /etc/ssl/certs/ca-certificates.crt:/etc/ssl/certs/ca-certificates.crt
       - {{ config_dir }}/certs/:/container/service/slapd/assets/certs/
+
+{% if nfs_hosts is defined %}
+      - ldap-database/slapd:/etc/ldap/slapd.d # this should be treated as data !!!
+      - ldap-database/ldap:/var/lib/ldap
+{% else %}
       - {{ data_dir }}/slapd:/etc/ldap/slapd.d # this should be treated as data !!!
       - {{ data_dir }}/ldap:/var/lib/ldap
+{% endif %}
 
       # note: setting the hostname as shown in the docs causes phpLDAPadmin container
       # (which is on the same swarm node and docker network) to resolve this
@@ -41,3 +47,13 @@ services:
       - LDAP_OPENLDAP_GID=1001
     command: >
       --loglevel debug
+
+{% if nfs_host is defined %}
+volumes:
+  ldap-database:
+    driver: local
+    driver_opts:
+      type: nfs
+      o: addr={{ nfs_host }},rw,nfsvers=4,async
+      device: :{{ nfs_path }}
+{% endif %}
