@@ -12,7 +12,7 @@ services:
       - {{ config_dir }}/certs/:/container/service/slapd/assets/certs/
 
 {% if nfs_host is defined %}
-      - slapd-config:/etc/ldap/slapd.d # this should be treated as data !!!
+      - slapd-config:/etc/ldap/slapd.d
       - ldap-database:/var/lib/ldap
 {% else %}
       - {{ data_dir }}/slapd:/etc/ldap/slapd.d # this should be treated as data !!!
